@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id 'meal_show' %}
+
+{% block main %}
+    <h1>{{ meal.text }}</h1>
+
+    <div class="section">
+        {{ include('meal/_delete_form.html.twig', {meal: meal}, with_context = false) }}
+    </div>
+
+    <br>
+    <br>
+
+    <p class="meal-metadata">
+        <span class="metadata"><i class="fa fa-calendar"></i> {{ meal.createdAt|localizeddate('long', 'medium', null, 'UTC') }}</span>
+        <br>
+        <span class="metadata"><i class="fa fa-user"></i> {{ meal.user.fullName }}</span>
+    </p>
+
+    <div class="well">
+        <p class="m-b-0">
+            <strong>{{ 'Calories' }}</strong>: {{ meal.caloriesNumber }}
+            <br>
+            <strong>{{ 'Text' }}</strong>: {{ meal.text }}
+        </p>
+    </div>
+
+    <div class="section">
+        <a href="{{ path('meal_edit', {id: meal.id}) }}" class="btn btn-md btn-success">
+            <i class="fa fa-edit" aria-hidden="true"></i> {{ 'action.edit_contents'|trans }}
+        </a>
+    </div>
+{% endblock %}
+

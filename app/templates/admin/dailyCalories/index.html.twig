@@ -1,0 +1,14 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block body_id 'admin_daily_calories' %}
+
+{% block main %}
+    <h1>{{ 'Daily max calories for all users' }}</h1>
+
+    {{ include('admin/dailyCalories/_form.html.twig', {
+        form: form,
+        button_label: 'action.save'|trans,
+        include_back_to_home_link: true,
+    }, with_context = false) }}
+
+{% endblock %}

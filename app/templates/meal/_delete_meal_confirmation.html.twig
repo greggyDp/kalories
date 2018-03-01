@@ -1,0 +1,19 @@
+DELETE CONFIRM
+<div class="modal fade" id="confirmationModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h4>{{ 'Do you really want to delte this meal?' }}</h4>
+                <p>{{ 'If you delete it, user will be very sad(' }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="btnNo" data-dismiss="modal">
+                    <i class="fa fa-ban" aria-hidden="true"></i> {{ 'Oh, ok then..' }}
+                </button>
+                <button type="button" class="btn btn-danger" id="btnYes" data-dismiss="modal">
+                    <i class="fa fa-trash" aria-hidden="true"></i> {{ 'Yes, delete it now!' }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

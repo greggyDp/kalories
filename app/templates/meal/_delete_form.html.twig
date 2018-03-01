@@ -1,0 +1,8 @@
+{{ include('meal/_delete_meal_confirmation.html.twig') }}
+<form action="{{ url('meal_delete', {id: meal.id}) }}" method="post" data-confirmation="true" id="delete-form">
+    <input type="hidden" name="token" value="{{ csrf_token('delete') }}" />
+    <button type="submit" class="btn btn-md btn-danger pull-right">
+        <i class="fa fa-trash" aria-hidden="true"></i>
+        {{ 'Delete meal' }}
+    </button>
+</form>

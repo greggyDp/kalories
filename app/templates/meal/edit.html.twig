@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id 'admin_meal_edit' %}
+
+{% block main %}
+    <h1>{{ 'Edit meal: '}} {{ meal.id  }}</h1>
+
+    <p class="meal-metadata">
+        <span class="metadata"><i class="fa fa-calendar"></i> {{ meal.createdAt|localizeddate('long', 'medium', null, 'UTC') }}</span>
+        <br>
+        <span class="metadata"><i class="fa fa-user"></i> {{ meal.user.fullName }}</span>
+    </p>
+
+    {{ include('meal/_form.html.twig', {
+        form: form,
+        button_label: 'action.save'|trans,
+        include_back_to_home_link: true,
+    }, with_context = false) }}
+
+    <div class="section actions" style="margin-top: -45px;">
+        {{ include('meal/_delete_form.html.twig', {meal: meal}, with_context = false) }}
+    </div>
+
+{% endblock %}

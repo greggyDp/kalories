@@ -1,0 +1,47 @@
+version: '2'
+services:
+  kl_data:
+    image: busybox
+    volumes:
+      - ./misc/data:/var/lib/mysql
+      - ./my.cnf:/etc/mysql/my.cnf
+
+  kl_mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: '123456'
+      MYSQL_DATABASE: 'kalories'
+      MYSQL_USER: 'test'
+      MYSQL_PASSWORD: '123456'
+    ports:
+      - "13306:3306"
+    volumes_from:
+      - kl_data
+    container_name: kl_mysql
+
+  kl_nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ../:/var/www/html
+    links:
+      - kl_web
+    container_name: kl_nginx
+
+  kl_web:
+    build: ./php-fpm71
+    volumes:
+      - ../:/var/www/html
+    links:
+      - kl_mysql
+    environment:
+      DATABASE_HOST: 'kl_mysql'
+      DATABASE_NAME: 'kalories'
+      DATABASE_USER: 'test'
+      DATABASE_PASSWORD: '123456'
+    container_name: kl_web
+
+  kl_memcached:
+    image: memcached:1-alpine
+    command: "memcached -M"
