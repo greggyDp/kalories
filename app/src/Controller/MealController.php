@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\DailyCalories;
 use App\Entity\Meal;
+use App\Exception\MealModifyDeniedException;
 use App\Form\MealType;
 use App\Repository\MealRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
@@ -95,6 +96,8 @@ class MealController extends AbstractController
      */
     public function edit(Request $request, Meal $meal): Response
     {
+        $this->olyOwnMealActionsGrantedValidation($meal);
+
         $form = $this->createForm(MealType::class, $meal);
         $form->handleRequest($request);
 
@@ -116,6 +119,8 @@ class MealController extends AbstractController
      */
     public function delete(Request $request, Meal $meal): Response
     {
+        $this->olyOwnMealActionsGrantedValidation($meal);
+
         if (!$this->isCsrfTokenValid('delete', $request->request->get('token'))) {
             return $this->redirectToRoute('meal_index');
         }
@@ -127,5 +132,14 @@ class MealController extends AbstractController
         $this->addFlash('success', 'Meal was deleted successfully');
 
         return $this->redirectToRoute('meal_index');
+    }
+
+    private function olyOwnMealActionsGrantedValidation(Meal $meal): void
+    {
+        if (!in_array('ROLE_ADMIN',  $this->getUser()->getRoles())) {
+            if ($meal->getUser() != $this->getUser()) {
+                throw new MealModifyDeniedException('Meal can only be modified by its user.');
+            }
+        }
     }
 }

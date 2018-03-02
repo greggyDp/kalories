@@ -30,35 +30,21 @@ class MealRepository extends ServiceEntityRepository
         return $this->createPaginator($qb->getQuery(), $page);
     }
 
-    //TODO duplicates $qb
     public function findAllMealsByUser(int $page = 1, Request $request, User $user): Pagerfanta
     {
-        $qb = $this->createQueryBuilder('m')
-            ->select('m, u')
-            ->join('m.user', 'u')
-            ->where('u = :user')
-            ->setParameter('user', $user)
-        ;
+        $qb = $this->getMealsWithUsersBaseQB($user)->select('m, u');
         $this->addFilterConditionsToQB($qb, $request);
-
         return $this->createPaginator($qb->getQuery(), $page);
     }
 
     public function getUserTotalDailyCalories(User $user): int
     {
-        $result = $this->createQueryBuilder('m')
+        return $this->getMealsWithUsersBaseQB($user)
             ->select('sum(m.caloriesNumber)')
-            ->join('m.user', 'u')
-            ->where('u = :user')
-            ->setParameter('user', $user)
             ->getQuery()
-            ->getSingleScalarResult()
-        ;
-
-        return $result;
+            ->getSingleScalarResult();
     }
 
-    //TODO need more extendable decision for filters (maybe from box)
     private function addFilterConditionsToQB(QueryBuilder $qb, Request $request): QueryBuilder
     {
         $byDate = ($request->query->get('byDate') ?? '');
@@ -88,5 +74,14 @@ class MealRepository extends ServiceEntityRepository
         $paginator->setCurrentPage($page);
 
         return $paginator;
+    }
+
+    private function getMealsWithUsersBaseQB(User $user): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('m')
+            ->join('m.user', 'u')
+            ->where('u = :user')
+            ->setParameter('user', $user);
+        return $qb;
     }
 }

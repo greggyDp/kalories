@@ -18,8 +18,8 @@ class DailyCaloriesRepository extends ServiceEntityRepository
         $record = $this->createQueryBuilder('dc')
             ->where('dc.createdAt BETWEEN :from AND :to')
             ->setParameters([
-                'from' => date('Y-m-d 00:00:00'),
-                'to' => date('Y-m-d 23:59:59'),
+                'from' => (new \DateTime())->format('Y-m-d 00:00:00'),
+                'to' => (new \DateTime())->format('Y-m-d 23:59:59'),
             ])
             ->getQuery()
             ->getOneOrNullResult();

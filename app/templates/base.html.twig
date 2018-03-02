@@ -33,7 +33,8 @@
                         <div class="navbar-collapse collapse">
                             <ul class="nav navbar-nav navbar-right">
 
-                                {% block header_navigation_links %}
+                                {% if app.user %}
+
                                     {% if is_granted('ROLE_ADMIN') %}
                                         <li>
                                             <a href="{{ path('admin_daily_calories') }}">
@@ -57,14 +58,13 @@
                                             </a>
                                         </li>
                                     {% endif %}
-                                {% endblock %}
 
-                                {% if app.user %}
                                     <li>
                                         <a href="{{ path('security_logout') }}">
                                             <i class="fa fa-sign-out" aria-hidden="true"></i> {{ 'menu.logout'|trans }}
                                         </a>
                                     </li>
+
                                 {% endif %}
 
                                 <li class="dropdown">

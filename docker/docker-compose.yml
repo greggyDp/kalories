@@ -41,7 +41,3 @@ services:
       DATABASE_USER: 'test'
       DATABASE_PASSWORD: '123456'
     container_name: kl_web
-
-  kl_memcached:
-    image: memcached:1-alpine
-    command: "memcached -M"
