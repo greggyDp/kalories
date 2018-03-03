@@ -9,8 +9,10 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
+use Pagerfanta\Exception\OutOfRangeCurrentPageException;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class MealRepository extends ServiceEntityRepository
 {
@@ -39,22 +41,28 @@ class MealRepository extends ServiceEntityRepository
 
     public function getUserTotalDailyCalories(User $user): int
     {
-        return $this->getMealsWithUsersBaseQB($user)
+        $count = $this->getMealsWithUsersBaseQB($user)
             ->select('sum(m.caloriesNumber)')
+            ->andWhere('m.createdAt > :byDateFrom')
+            ->setParameter('byDateFrom', (new \DateTime())->format('Y-m-d 00:00:00'))
+            ->andWhere('m.createdAt < :byDateTo')
+            ->setParameter('byDateTo', (new \DateTime())->format('Y-m-d 23:59:59'))
             ->getQuery()
             ->getSingleScalarResult();
+
+        return (int) $count;
     }
 
     private function addFilterConditionsToQB(QueryBuilder $qb, Request $request): QueryBuilder
     {
-        $byDate = ($request->query->get('byDate') ?? '');
-        if (!empty($byDate)) {
-            $qb->andWhere('m.createdAt > :byDateFrom')
+        $createdAt = ($request->query->get('createdAt') ?? '');
+        if (!empty($createdAt)) {
+            $qb
+                ->andWhere('m.createdAt > :byDateFrom')
+                ->setParameter('byDateFrom', (new \DateTime($createdAt))->format('Y-m-d 00:00:00'))
                 ->andWhere('m.createdAt < :byDateTo')
-                ->setParameters([
-                    'byDateFrom' => new \DateTime($byDate . '00:00:00'),
-                    'byDateTo' => new \DateTime($byDate . '23:59:59'),
-                ]);
+                ->setParameter('byDateTo', (new \DateTime($createdAt))->format('Y-m-d 23:59:59'))
+            ;
         }
 
         $sortByDate = ($request->query->get('sortByDate') ?? 'desc');
@@ -71,7 +79,11 @@ class MealRepository extends ServiceEntityRepository
     {
         $paginator = new Pagerfanta(new DoctrineORMAdapter($query));
         $paginator->setMaxPerPage(Meal::NUM_ITEMS);
-        $paginator->setCurrentPage($page);
+        try {
+            $paginator->setCurrentPage($page);
+        } catch (OutOfRangeCurrentPageException $e) {
+            $paginator->setCurrentPage(1);
+        }
 
         return $paginator;
     }

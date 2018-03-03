@@ -1,0 +1,14 @@
+{% set queryParams = app.request.query.all %}
+
+<div class="input-group date" style="width: 40%;">
+    <input
+            type="text"
+            id="meal_createdAt_filter"
+            name="createdAtFilter"
+            required="required"
+            data-date-format="YYYY-MM-DD"
+            data-date-locale="en"
+            class="form-control"
+            value="{{ (queryParams.createdAt is defined) ? queryParams.createdAt :  "" }}"
+    >
+</div>

@@ -64,7 +64,7 @@ class MealController extends AbstractController
             $em->persist($meal);
             $em->flush();
 
-            $this->addFlash('success', 'meal.created_successfully');
+            $this->addFlash('success', 'Meal was created successfully!');
 
             if ($form->get('saveAndCreateNew')->isClicked()) {
                 return $this->redirectToRoute('meal_new');

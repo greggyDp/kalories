@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class DailyCalories
 {
-    public const DEFAULT_DAILY_CALORIES_NUMBER = 1000;
+    public const DEFAULT_DAILY_CALORIES_NUMBER = 4000;
 
     /**
      * User constructor.
