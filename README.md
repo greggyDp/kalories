@@ -11,7 +11,7 @@ If you dont want to use Docker skip step 2.
      - `composer install` to update all dependencies. 
      - `php bin/console doctrine:migrations:migrate` to apply migrations
      - `php bin/console doctrine:fixtures:load` to apply fixtures
-4. Open `http://127.0.0.1/` in your bowser to access application. 
+4. Open `http://127.0.0.1:8888/` in your browser to access application. 
 
 5. (OPTIONAL) If you want enable prod mode, just edit .env file in `/path/to/kalories/app/.env` (or `/app/.env` if use docker) by setting APP_ENV & APP_DEBUG variables.
 
