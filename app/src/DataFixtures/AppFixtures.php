@@ -2,12 +2,8 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Comment;
 use App\Entity\Meal;
-use App\Entity\Post;
-use App\Entity\Tag;
 use App\Entity\User;
-use App\Utils\Slugger;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -46,13 +42,23 @@ class AppFixtures extends Fixture
 
     private function loadMeals(ObjectManager $manager)
     {
+        $hoursInterval = 0;
         foreach ($this->getMealData($manager) as [$text, $caloriesNumber, $user]) {
+            $createdAt = (new \DateTime('yesterday'))->add((new \DateInterval("PT{$hoursInterval}H")));
+            if ($createdAt >= new \DateTime()) {
+                $hoursInterval = 0;
+                $createdAt = new \DateTime();
+            }
+
             $meal = (new Meal())
                 ->setText($text)
                 ->setCaloriesNumber($caloriesNumber)
-                ->setUser($user);
+                ->setUser($user)->setCreatedAt(
+                   $createdAt
+                );
 
             $manager->persist($meal);
+            $hoursInterval += 2;
         }
 
         $manager->flush();

@@ -21,4 +21,4 @@ If you want to change/update frontend asstets such as JS or CSS use Webpack Enco
      `yarn run encore dev --watch` - to rebuild after every changes in assets
      `yarn run encore production` - build prodaction versions
      
-P.S. You must have NPM and YARN in your system.  (Or extend docker. TODO)
+P.S. If you do not use docker you must have NPM and YARN in your system to work with frontend assets.
