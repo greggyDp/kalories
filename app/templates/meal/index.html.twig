@@ -10,7 +10,8 @@
 {% set currentPath = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
 {% set queryParams = app.request.query.all %}
 {% set sortByDateCond = ((queryParams.sortByDate is defined) and (queryParams.sortByDate == 'asc')) %}
-{% set createdAtCond = (queryParams.createdAt is defined) %}
+{% set createdAtFromCond = (queryParams.createdAtFrom is defined) %}
+{% set createdAtToCond = (queryParams.createdAtTo is defined) %}
 
 {% block main %}
     <h1>{{ 'My Meals' }}</h1>
@@ -53,7 +54,8 @@
                     <i class="fa fa-calendar" aria-hidden="true"></i>
                     <a href="{{ path('meal_index', {
                         'sortByDate': sortByDateCond ? 'desc' : 'asc',
-                        'createdAt': createdAtCond ? queryParams.createdAt : ""
+                        'createdAtFrom': createdAtFromCond ? queryParams.createdAtFrom : "",
+                        'createdAtTo': createdAtToCond ? queryParams.createdAtTo : ""
                     }) }}">
                         {{ 'Created at' }}
                         {% if sortByDateCond %}

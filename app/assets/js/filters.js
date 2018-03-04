@@ -1,26 +1,45 @@
 $(function() {
-    $(function() {
-        $('input[name="createdAtFilter"]')
-            .datetimepicker()
-            .on('dp.hide',function(event){
+    $('input[name="createdAtFilterFrom"]')
+        .datetimepicker()
+        .on('dp.hide',function(event){
             var pathname = window.location.pathname;
             var urlParams = new URLSearchParams(window.location.search);
             var $newDate = event.date.format('YYYY-MM-DD');
+            
+            if (urlParams.get('createdAtFrom') === $newDate) {
+                return;
+            }
 
-            if (urlParams.has('createdAt')) {
-                if (urlParams.get('createdAt') === $newDate) {
-                    return;
-                }
-                urlParams.set('createdAt', $newDate);
+            if (urlParams.has('createdAtFrom')) {
+                urlParams.set('createdAtFrom', $newDate);
             } else {
-                if (urlParams.has('page')) {
-                    urlParams.append('createdAt', $newDate);
-                } else {
-                    urlParams.append('createdAt', $newDate);
-                }
+                urlParams.append('createdAtFrom', $newDate);
             }
 
             window.location.href = pathname + '?' + urlParams.toString();
         });
+
+    $('input[name="createdAtFilterTo"]')
+        .datetimepicker()
+        .on('dp.hide',function(event){
+        var pathname = window.location.pathname;
+        var urlParams = new URLSearchParams(window.location.search);
+        var $newDate = event.date.format('YYYY-MM-DD');
+
+        if (urlParams.has('createdAtFrom') === false) {
+            return;
+        }
+
+        if (urlParams.get('createdAtTo') === $newDate) {
+            return;
+        }
+
+        if (urlParams.has('createdAtTo')) {
+            urlParams.set('createdAtTo', $newDate);
+        } else {
+            urlParams.append('createdAtTo', $newDate);
+        }
+
+        window.location.href = pathname + '?' + urlParams.toString();
     });
 });

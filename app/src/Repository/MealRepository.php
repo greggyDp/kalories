@@ -12,7 +12,6 @@ use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Exception\OutOfRangeCurrentPageException;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class MealRepository extends ServiceEntityRepository
 {
@@ -55,13 +54,19 @@ class MealRepository extends ServiceEntityRepository
 
     private function addFilterConditionsToQB(QueryBuilder $qb, Request $request): QueryBuilder
     {
-        $createdAt = ($request->query->get('createdAt') ?? '');
-        if (!empty($createdAt)) {
+        $createdAtFrom = ($request->query->get('createdAtFrom') ?? '');
+        if (!empty($createdAtFrom)) {
             $qb
                 ->andWhere('m.createdAt > :byDateFrom')
-                ->setParameter('byDateFrom', (new \DateTime($createdAt))->format('Y-m-d 00:00:00'))
+                ->setParameter('byDateFrom', (new \DateTime($createdAtFrom))->format('Y-m-d 00:00:00'))
+            ;
+        }
+
+        $createdAtTo = ($request->query->get('createdAtTo') ?? '');
+        if (!empty($createdAtTo)) {
+            $qb
                 ->andWhere('m.createdAt < :byDateTo')
-                ->setParameter('byDateTo', (new \DateTime($createdAt))->format('Y-m-d 23:59:59'))
+                ->setParameter('byDateTo', (new \DateTime($createdAtTo))->format('Y-m-d 23:59:59'))
             ;
         }
 

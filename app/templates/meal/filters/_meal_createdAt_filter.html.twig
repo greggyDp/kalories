@@ -1,14 +1,29 @@
 {% set queryParams = app.request.query.all %}
 
-<div class="input-group date" style="width: 40%;">
-    <input
-            type="text"
-            id="meal_createdAt_filter"
-            name="createdAtFilter"
-            required="required"
-            data-date-format="YYYY-MM-DD"
-            data-date-locale="en"
-            class="form-control"
-            value="{{ (queryParams.createdAt is defined) ? queryParams.createdAt :  "" }}"
-    >
+<div class="input-group date" style="width: 60%;">
+    <div class="input-group input-daterange">
+        <input
+                type="text"
+                id="meal_createdAt_filter"
+                name="createdAtFilterFrom"
+                required="required"
+                data-date-format="YYYY-MM-DD"
+                data-date-locale="en"
+                class="form-control"
+                placeholder="From date:"
+                value="{{ (queryParams.createdAtFrom is defined) ? queryParams.createdAtFrom :  "" }}"
+        >
+        <div class="input-group-addon">to</div>
+        <input
+                type="text"
+                id="meal_createdAt_filter"
+                name="createdAtFilterTo"
+                required="required"
+                data-date-format="YYYY-MM-DD"
+                data-date-locale="en"
+                class="form-control"
+                placeholder="To date:"
+                value="{{ (queryParams.createdAtTo is defined) ? queryParams.createdAtTo :  "" }}"
+        >
+    </div>
 </div>

@@ -6,11 +6,14 @@ If you dont want to use Docker skip step 2.
 2. cd  to `/path/to/kalories/docker` and run:  
      - `docker-compose up` or `docker-compose up -d` to demonize
      - `docker exec -t -i kl_web /bin/bash` to access web(php) container
+     - `cd app` to access workdir
 3. In root app folder(`path/to/kalories/app`) run: 
      - `composer install` to update all dependencies. 
      - `php bin/console doctrine:migrations:migrate` to apply migrations
      - `php bin/console doctrine:fixtures:load` to apply fixtures
 4. Open `http://127.0.0.1/` in your bowser to access application. 
+
+5. (OPTIONAL) If you want enable prod mode, just edit .env file in `/path/to/kalories/app/.env` (or `/app/.env` if use docker) by setting APP_ENV & APP_DEBUG variables.
 
 You can edit `/etc/hosts` file by adding `kaloris.dev www.kalories.dev` after `localhost` inline.
 
