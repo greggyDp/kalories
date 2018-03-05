@@ -19,7 +19,12 @@ You can edit `/etc/hosts` file by adding `kaloris.dev www.kalories.dev` after `l
 
 If you want to change/update frontend asstets such as JS or CSS use Webpack Encore. 
 - Do what you need in /app/assets
-- Then run commands:
+- Then run `npm install`
+- Then use such commands to build assets:
+      `./node_modules/.bin/encore dev` - to build with dev comments and annotations
+      `./node_modules/.bin/encore dev --watch` - to rebuild after every changes in assets
+      `./node_modules/.bin/encore production` - build prodaction versions
+- Or with yarn commands:
      `yarn run encore dev` - to build with dev comments and annotations
      `yarn run encore dev --watch` - to rebuild after every changes in assets
      `yarn run encore production` - build prodaction versions
